@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>股票回测系统</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .results img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+    </style>
+    <script>
+        async function runBacktest() {
+            let data = {
+                ts_token: document.getElementById("ts_token").value,
+                ts_code: document.getElementById("ts_code").value,
+                start_date: document.getElementById("start_date").value,
+                end_date: document.getElementById("end_date").value,
+                initial_money: parseFloat(document.getElementById("initial_money").value),
+                buy_rate: parseFloat(document.getElementById("buy_rate").value),
+                short_window: parseInt(document.getElementById("short_window").value),
+                long_window: parseInt(document.getElementById("long_window").value),
+                cost_rate: parseFloat(document.getElementById("cost_rate").value)
+            };
+
+            try {
+                let response = await fetch("/backtest", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) {
+                    throw new Error("网络请求出错");
+                }
+                let result = await response.json();
+                let output = `
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">回测结果</h5>
+                            <p class="card-text">累计收益率: ${result.cumulative_return.toFixed(4)}</p>
+                            <p class="card-text">最大收益率: ${result.max_return.toFixed(4)}</p>
+                            <p class="card-text">最大回撤: ${result.max_drawdown.toFixed(4)}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h5>均线走势图:</h5>
+                        <img src="data:image/png;base64,${result.img1}" alt="均线走势图" class="img-fluid">
+                    </div>
+                    <div class="mt-4">
+                        <h5>资产走势图:</h5>
+                        <img src="data:image/png;base64,${result.img2}" alt="资产走势图" class="img-fluid">
+                    </div>
+                `;
+                document.getElementById("results").innerHTML = output;
+            } catch (error) {
+                console.error("回测出错:", error);
+                document.getElementById("results").innerHTML = `<div class="alert alert-danger mt-4" role="alert">回测出错: ${error}</div>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">股票回测系统</h1>
+        <form>
+            <div class="form-group">
+                <label for="ts_token">TuShare Token</label>
+                <input type="text" class="form-control" id="ts_token" placeholder="请输入TuShare Token">
+            </div>
+            <div class="form-group">
+                <label for="ts_code">股票代码</label>
+                <input type="text" class="form-control" id="ts_code" placeholder="请输入股票代码">
+            </div>
+            <div class="form-group">
+                <label for="start_date">起始日期</label>
+                <input type="date" class="form-control" id="start_date">
+            </div>
+            <div class="form-group">
+                <label for="end_date">结束日期</label>
+                <input type="date" class="form-control" id="end_date">
+            </div>
+            <div class="form-group">
+                <label for="initial_money">初始资金</label>
+                <input type="number" class="form-control" id="initial_money" placeholder="请输入初始资金">
+            </div>
+            <div class="form-group">
+                <label for="buy_rate">购买比例</label>
+                <input type="number" step="0.01" class="form-control" id="buy_rate" placeholder="请输入购买比例">
+            </div>
+            <div class="form-group">
+                <label for="short_window">短均线窗口</label>
+                <input type="number" class="form-control" id="short_window" placeholder="请输入短均线窗口">
+            </div>
+            <div class="form-group">
+                <label for="long_window">长均线窗口</label>
+                <input type="number" class="form-control" id="long_window" placeholder="请输入长均线窗口">
+            </div>
+            <div class="form-group">
+                <label for="cost_rate">费率</label>
+                <input type="number" step="0.0001" class="form-control" id="cost_rate" placeholder="请输入费率">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="runBacktest()">运行回测</button>
+        </form>
+        <div id="results" class="results"></div>
+    </div>
+    <!-- 引入 Bootstrap 依赖的 JS 库 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

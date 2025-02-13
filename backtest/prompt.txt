@@ -1,0 +1,123 @@
+本部分使用Deepseek或chatGPT进行相关的问答
+
+1）
+疑问：对滑点的概念未知
+
+问：”本金为1,000,000,每次买入为本金的百分之20.滑点为万分之一“这句话是什么意思
+
+回答：
+这句话描述了金融交易中的三个关键参数，具体含义如下:
+本金为1,000,000
+指用于投资的初始资金总额为100万货币单位(如人民币、美元等)2.每次买入为本金的20%
+每次交易时，投入的资金为初始本金的20%，即每次买入金额为:1,000,000 x20%= 200,000.
+若未特别说明”本金”是否动态调整，通常指固定每次买入20万，而非按当前剩余本金计算,3.滑点为万分之一
+滑点(slippage):指实际成交价与预期价格的差异，常见于流动性不足或市场波动时.0
+万分之一(0.01%):此处指滑点率为成交价格的0.01%。例如:0
+若计划以每股100元买入，实际成交价可能为 100x(1+0.0001)= 100.01 元，导致额外成本。
+买入200,000元标的时，若滑点导致价格波动0.01%，实际成本可能增加或减少约20元(200,000 x 0.0001)
+
+综合理解:
+该策略使用100万本金，每次固定投入20万进行买入，同时考虑因市场波动产生的微小价格偏差(万分之滑点)，这一偏差会影响实际交易成本或收益。滑点通常在策略回测或实盘交易中作为成本因素纳入计算以更真实地模拟交易结果。
+
+
+2）
+疑问：代码中会存在一些warning，有时候warning会一大片的出现，影响代码的观感
+
+问：在python中加入一个 忽略warning信息
+
+回答：（返回的代码部分）
+import warnings
+warnings.filterwarnings('ignore')
+
+
+3）
+疑问：图像绘制中使用科学技术不便于直接观察数值
+
+问：帮我在该代码中禁用科学计数，并在图像中标注中total序列的最大值、最小值点 （代码省略）
+
+回答：
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+
+# 创建对象
+fig, ax = plt.subplots(figsize=(15, 8))
+
+# 绘制曲线，指定不同的颜色
+ax.plot(df.index, df['total'], label='总资产价值', color='black')
+
+# 仅标记 trade 列中值为 1 和 -1 的点
+df_pos = df[df['trade'] == 1]
+df_neg = df[df['trade'] == -1]
+
+ax.scatter(df_pos.index, df_pos['total'], color='green', marker='x', label='买入点')
+ax.scatter(df_neg.index, df_neg['total'], color='red', marker='x', label='卖出点')
+
+# 禁用科学计数法
+ax.ticklabel_format(style='plain', axis='y')
+
+# 标注 total 序列的最大值和最小值点
+max_idx = df['total'].idxmax()
+min_idx = df['total'].idxmin()
+ax.scatter(max_idx, df['total'].max(), color='blue', s=100, label='最大值')
+ax.scatter(min_idx, df['total'].min(), color='orange', s=100, label='最小值')
+
+# 设置 x 轴刻度间隔
+ax.xaxis.set_major_locator(MaxNLocator(integer=True, prune='both'))
+
+# 添加图例
+ax.legend()
+
+# 显示图形
+plt.show()
+
+4）
+疑问：后端开发如何做
+
+问：python后端开发平台有哪些？
+
+回答：
+Python 后端开发平台主要指的是用于构建 Web 服务和 API 的开发框架或工具集。常见的平台和框架包括：
+
+1. **Django**  
+   一个“开箱即用”的全栈框架，提供了 ORM、认证、管理后台等众多功能，非常适合需要快速搭建大型、复杂项目的开发者。citeturn0search0
+
+2. **Flask**  
+   一个轻量级微框架，核心库非常精简，灵活性高，可以通过扩展插件来添加各种功能，适合中小型项目或对灵活性要求较高的应用。citeturn0search0
+
+3. **FastAPI**  
+   一个基于 Python 3.6+ 的现代异步框架，以高性能著称，内置数据验证和自动生成 API 文档，非常适合构建高性能 RESTful API。citeturn0search0
+
+4. **Tornado**  
+   除了作为 Web 框架外，Tornado 还是一个异步网络库，擅长处理长连接（如 WebSocket）和高并发场景，适合实时应用。citeturn0search0
+
+5. **Pyramid**  
+   一个灵活且可扩展的框架，介于全栈框架与微框架之间，允许开发者根据项目需要灵活选择功能模块。citeturn0search0
+
+6. **其他轻量框架**  
+   如 **Bottle**、**Sanic**（基于异步 IO，主打高性能）、**Falcon**（专注于构建高性能 API）等，这些框架各有特点，可根据项目需求进行选择。
+
+此外，除了以上框架，开发者在部署时也常会结合 WSGI 服务器（如 Gunicorn、uWSGI）以及容器化部署（如 Docker）和云服务平台（如 Heroku、AWS、GCP）来构建完整的后端开发环境。citeturn0search0
+
+根据项目规模、性能需求和开发习惯选择合适的平台，可以大大提高开发效率和系统稳定性。
+
+
+5）
+疑问：如何涉及前端和后端代码？
+ 
+问：（在上传ipynb文件后）请结合该jupyter代码文件，帮我写一组前后端的文件，其中输入为tushare接口、股票代码、开始日期、结束日期等变量（可以参考代码）
+输出为累计收益率、最大收益率、最大回撤和相关图像。
+
+回答：*代码过长，在此省略*
+
+
+6）
+疑问：最初的前端代码较为简单
+
+问：请让页面更加美观一些
+
+回答：*内容与提交的文件一致*
+
+---------------------------------------------------------------
+
+jupyter代码在编译时使用了VSCODE进行书写
+有部分代码会根据注释和前后文自动酌情填报
