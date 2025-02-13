@@ -23,7 +23,7 @@ TuShare Token：（请输入你本人的tushare的token）
 → 以上参数也可以修改
 
 
-[返回]
+## 返回
 
 页面在后端运行将会返回五项内容
 1. 累计收益率
@@ -35,7 +35,7 @@ TuShare Token：（请输入你本人的tushare的token）
 5. 总资产走势图
 
 
-[使用方法]
+## 使用方法
 
 1.使用vscode或pycharm等打开app.py后点击运行
 
