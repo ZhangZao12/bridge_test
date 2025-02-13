@@ -2,7 +2,7 @@
 
 使用Flask可进行后端开发，在网页前端有以下参数需要输入
 
-TuShare Token：（请输入你本人的tushare的token）
+TuShare Token：（请输入您的tushare的token）
 
 股票代码：（请输入平安银行的股票代码 000001.SZ     想输入其他的代码也可以）
 
