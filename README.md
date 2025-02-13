@@ -1,4 +1,5 @@
 # bridge_test
+
 使用Flas可进行后端开发，在网页前端有以下参数需要输入
 
 TuShare Token：（请输入你本人的tushare的token）
@@ -21,7 +22,9 @@ TuShare Token：（请输入你本人的tushare的token）
 
 → 以上参数也可以修改
 
+
 [返回]
+
 页面在后端运行将会返回五项内容
 1. 累计收益率
 2. 最大收益率
@@ -31,7 +34,9 @@ TuShare Token：（请输入你本人的tushare的token）
 4. 均线走势图
 5. 总资产走势图
 
+
 [使用方法]
+
 1.使用vscode或pycharm等打开app.py后点击运行
 
 2.点击链接http://127.0.0.1:5000 或 http://192.168.71.65:5000
