@@ -1,6 +1,6 @@
 # bridge_test
 
-使用Flas可进行后端开发，在网页前端有以下参数需要输入
+使用Flask可进行后端开发，在网页前端有以下参数需要输入
 
 TuShare Token：（请输入你本人的tushare的token）
 
