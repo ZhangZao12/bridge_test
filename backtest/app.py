@@ -138,11 +138,13 @@ def calculate_indicators(df, short_window, long_window, initial_money, buy_rate,
 
     cum_return = df['cumulative_return'].iloc[-1]
 
+    final_return = cum_return*initial_money
+
     #print(cum_return)
     #print(max_return)
     #print(max_drawdown)
 
-    return df, cum_return, max_return, max_drawdown
+    return df, cum_return, max_return, max_drawdown,final_return
 
 def plot_chart(df):
     fig, ax = plt.subplots(figsize=(15, 8))
@@ -210,7 +212,7 @@ def index():
 def backtest():
     data = request.json
     df = fetch_stock_data(data['ts_token'], data['ts_code'], data['start_date'], data['end_date'])
-    df, cum_return, max_return, max_drawdown= calculate_indicators(
+    df, cum_return, max_return, max_drawdown,final_return = calculate_indicators(
         df, data['short_window'], data['long_window'], data['initial_money'], data['buy_rate'], data['cost_rate'],data['start_date'],data['end_date'])
     img1 = plot_chart(df)
     img2 = plot_total(df)
@@ -219,6 +221,7 @@ def backtest():
         "cumulative_return": cum_return,
         "max_return": max_return,
         "max_drawdown": max_drawdown,
+        "final_return":final_return,
         "img1": img1,
         "img2": img2
     })
